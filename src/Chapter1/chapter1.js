@@ -20,13 +20,10 @@ const plays = {
 function statement(invoce, plays) {
   let totalAmount = 0;
   let volumeCredit = 0;
-  let result = `청구 내역 (고객명: ${invoce.customer})\n`;
+  let result = `청구 내역 (고객명: ${invoce[0].customer})\n`;
 
-  //
-  console.log("plays: ", plays);
   for (let perf of invoce[0].performances) {
     const play = plays[perf.playID];
-    console.log(play);
     let thisAmount = 0;
 
     switch (play.type) {
