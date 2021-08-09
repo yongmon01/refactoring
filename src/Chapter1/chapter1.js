@@ -45,15 +45,21 @@ function playFor(aPerformace) {
   return plays[aPerformace.playID];
 }
 
+function volumeCreditFor(aPerformace) {
+  let result = 0;
+  result += Math.max(aPerformace.audience - 30, 0);
+  if ("comedy" === playFor(aPerformace).type)
+    result += Math.floor(aPerformace.audience / 5);
+  return result;
+}
+
 function statement(invoce, plays) {
   let totalAmount = 0;
   let volumeCredit = 0;
   let result = `청구 내역 (고객명: ${invoce[0].customer})\n`;
 
   for (let perf of invoce[0].performances) {
-    volumeCredit += Math.max(perf.audience - 30, 0);
-    if ("comedy" === playFor(perf).type)
-      volumeCredit += Math.floor(perf.audience / 5);
+    volumeCredit += volumeCreditFor(perf);
     result += `${playFor(perf).name}: ${amountFor(perf) / 100} (${
       perf.audience
     })석 \n`;
