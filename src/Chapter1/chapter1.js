@@ -51,15 +51,13 @@ function statement(invoce, plays) {
   let result = `청구 내역 (고객명: ${invoce[0].customer})\n`;
 
   for (let perf of invoce[0].performances) {
-    let thisAmount = amountFor(perf);
-
     volumeCredit += Math.max(perf.audience - 30, 0);
     if ("comedy" === playFor(perf).type)
       volumeCredit += Math.floor(perf.audience / 5);
-    result += `${playFor(perf).name}: ${thisAmount / 100} (${
+    result += `${playFor(perf).name}: ${amountFor(perf) / 100} (${
       perf.audience
     })석 \n`;
-    totalAmount += thisAmount;
+    totalAmount += amountFor(perf);
   }
   result += `총액: ${totalAmount / 100}\n`;
   result += `적립 포인트 : ${volumeCredit}점\n`;
