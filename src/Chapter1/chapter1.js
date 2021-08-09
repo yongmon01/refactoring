@@ -17,9 +17,9 @@ const plays = {
   othello: { name: "othello", type: "tragedy" },
 };
 
-function amountFor(aPerformance, play) {
+function amountFor(aPerformance) {
   let result = 0;
-  switch (play.type) {
+  switch (playFor(aPerformance).type) {
     case "tragedy":
       result = 40000;
       if (aPerformance.audience > 20) {
@@ -41,18 +41,24 @@ function amountFor(aPerformance, play) {
   return result;
 }
 
+function playFor(aPerformace) {
+  return plays[aPerformace.playID];
+}
+
 function statement(invoce, plays) {
   let totalAmount = 0;
   let volumeCredit = 0;
   let result = `청구 내역 (고객명: ${invoce[0].customer})\n`;
 
   for (let perf of invoce[0].performances) {
-    const play = plays[perf.playID];
-    let thisAmount = amountFor(perf, play);
+    let thisAmount = amountFor(perf);
 
     volumeCredit += Math.max(perf.audience - 30, 0);
-    if ("comedy" === play.type) volumeCredit += Math.floor(perf.audience / 5);
-    result += `${play.name}: ${thisAmount / 100} (${perf.audience})석 \n`;
+    if ("comedy" === playFor(perf).type)
+      volumeCredit += Math.floor(perf.audience / 5);
+    result += `${playFor(perf).name}: ${thisAmount / 100} (${
+      perf.audience
+    })석 \n`;
     totalAmount += thisAmount;
   }
   result += `총액: ${totalAmount / 100}\n`;
