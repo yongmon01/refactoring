@@ -53,20 +53,27 @@ function volumeCreditFor(aPerformace) {
   return result;
 }
 
+// 책: function totalVolumeCredit(){
+function totalVolumeCredit(invoce) {
+  let result = 0;
+  for (let perf of invoce[0].performances) {
+    result += volumeCreditFor(perf);
+  }
+  return result;
+}
+
 function statement(invoce, plays) {
   let totalAmount = 0;
-  let volumeCredit = 0;
   let result = `청구 내역 (고객명: ${invoce[0].customer})\n`;
 
   for (let perf of invoce[0].performances) {
-    volumeCredit += volumeCreditFor(perf);
     result += `${playFor(perf).name}: ${amountFor(perf) / 100} (${
       perf.audience
     })석 \n`;
     totalAmount += amountFor(perf);
   }
   result += `총액: ${totalAmount / 100}\n`;
-  result += `적립 포인트 : ${volumeCredit}점\n`;
+  result += `적립 포인트 : ${totalVolumeCredit(invoce)}점\n`;
   return result;
 }
 
