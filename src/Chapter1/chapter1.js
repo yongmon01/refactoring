@@ -22,31 +22,17 @@ function renderPlainText(data, plays) {
   for (let perf of data.performances) {
     result += `${perf.play.name}: ${perf.amount / 100} (${perf.audience})석 \n`;
   }
-  result += `총액: ${totalAmount() / 100}\n`;
-  result += `적립 포인트 : ${totalVolumeCredit()}점\n`;
+  result += `총액: ${data.totalAmount / 100}\n`;
+  result += `적립 포인트 : ${data.totalVolumeCredit}점\n`;
   return result;
-
-  function totalVolumeCredit() {
-    let result = 0;
-    for (let perf of data.performances) {
-      result += perf.volumeCredit;
-    }
-    return result;
-  }
-
-  function totalAmount() {
-    let result = 0;
-    for (let perf of data.performances) {
-      result += perf.amount;
-    }
-    return result;
-  }
 }
 
 function statement(invoce, plays) {
   const statementData = {};
   statementData.customer = invoce[0].customer;
   statementData.performances = invoce[0].performances.map(enrichPerformace);
+  statementData.totalAmount = totalAmount(statementData);
+  statementData.totalVolumeCredit = totalVolumeCredit(statementData);
   return renderPlainText(statementData, plays);
 
   function enrichPerformace(aPerformace) {
@@ -90,6 +76,22 @@ function statement(invoce, plays) {
     result += Math.max(aPerformace.audience - 30, 0);
     if ("comedy" === aPerformace.play.type)
       result += Math.floor(aPerformace.audience / 5);
+    return result;
+  }
+
+  function totalAmount(data) {
+    let result = 0;
+    for (let perf of data.performances) {
+      result += perf.amount;
+    }
+    return result;
+  }
+
+  function totalVolumeCredit(data) {
+    let result = 0;
+    for (let perf of data.performances) {
+      result += perf.volumeCredit;
+    }
     return result;
   }
 }
