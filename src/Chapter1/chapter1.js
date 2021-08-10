@@ -20,7 +20,7 @@ const plays = {
 function renderPlainText(data, plays) {
   let result = `청구 내역 (고객명: ${data.customer})\n`;
   for (let perf of data.performances) {
-    result += `${playFor(perf).name}: ${amountFor(perf) / 100} (${
+    result += `${perf.play.name}: ${amountFor(perf) / 100} (${
       perf.audience
     })석 \n`;
   }
@@ -30,7 +30,7 @@ function renderPlainText(data, plays) {
 
   function amountFor(aPerformance) {
     let result = 0;
-    switch (playFor(aPerformance).type) {
+    switch (aPerformance.play.type) {
       case "tragedy":
         result = 40000;
         if (aPerformance.audience > 20) {
@@ -52,14 +52,10 @@ function renderPlainText(data, plays) {
     return result;
   }
 
-  function playFor(aPerformace) {
-    return plays[aPerformace.playID];
-  }
-
   function volumeCreditFor(aPerformace) {
     let result = 0;
     result += Math.max(aPerformace.audience - 30, 0);
-    if ("comedy" === playFor(aPerformace).type)
+    if ("comedy" === aPerformace.play.type)
       result += Math.floor(aPerformace.audience / 5);
     return result;
   }
@@ -86,11 +82,18 @@ function statement(invoce, plays) {
   const statementData = {};
   statementData.customer = invoce[0].customer;
   statementData.performances = invoce[0].performances.map(enrichPerformace);
+  console.log(statementData.performances);
   return renderPlainText(statementData, plays);
 
   function enrichPerformace(aPerformace) {
     const result = Object.assign({}, aPerformace);
+    // 여기서 play = {...} 객체가 statementData.performance들에 각각 추가됨.
+    result.play = playFor(result);
     return result;
+  }
+
+  function playFor(aPerformace) {
+    return plays[aPerformace.playID];
   }
 }
 
