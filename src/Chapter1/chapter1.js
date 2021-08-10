@@ -70,7 +70,7 @@ function totalAmount(invoce) {
   return result;
 }
 
-function statement(invoce, plays) {
+function renderPlainText(invoce, plays) {
   let result = `청구 내역 (고객명: ${invoce[0].customer})\n`;
 
   for (let perf of invoce[0].performances) {
@@ -81,6 +81,10 @@ function statement(invoce, plays) {
   result += `총액: ${totalAmount(invoce) / 100}\n`;
   result += `적립 포인트 : ${totalVolumeCredit(invoce)}점\n`;
   return result;
+}
+
+function statement(invoce, plays) {
+  return renderPlainText(invoce, plays);
 }
 
 console.log(statement(invoces, plays));
