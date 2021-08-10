@@ -17,7 +17,7 @@ const plays = {
   othello: { name: "othello", type: "tragedy" },
 };
 
-function renderPlainText(data, plays) {
+function renderPlainText(data) {
   let result = `청구 내역 (고객명: ${data.customer})\n`;
   for (let perf of data.performances) {
     result += `${perf.play.name}: ${perf.amount / 100} (${perf.audience})석 \n`;
@@ -28,12 +28,15 @@ function renderPlainText(data, plays) {
 }
 
 function statement(invoce, plays) {
+  return renderPlainText(createStatementData(invoce, plays));
+}
+
+function createStatementData(invoce, plays) {
   const statementData = {};
   statementData.customer = invoce[0].customer;
   statementData.performances = invoce[0].performances.map(enrichPerformace);
   statementData.totalAmount = totalAmount(statementData);
   statementData.totalVolumeCredit = totalVolumeCredit(statementData);
-  return renderPlainText(statementData, plays);
 
   function enrichPerformace(aPerformace) {
     const result = Object.assign({}, aPerformace);
@@ -86,6 +89,8 @@ function statement(invoce, plays) {
   function totalVolumeCredit(data) {
     return data.performances.reduce((total, p) => total + p.volumeCredit, 0);
   }
+
+  return statementData;
 }
 
 console.log(statement(invoces, plays));
