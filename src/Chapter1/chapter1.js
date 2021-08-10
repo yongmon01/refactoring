@@ -70,10 +70,10 @@ function totalAmount(invoce) {
   return result;
 }
 
-function renderPlainText(invoce, plays) {
-  let result = `청구 내역 (고객명: ${invoce[0].customer})\n`;
+function renderPlainText(data, invoce, plays) {
+  let result = `청구 내역 (고객명: ${data.customer})\n`;
 
-  for (let perf of invoce[0].performances) {
+  for (let perf of data.performances) {
     result += `${playFor(perf).name}: ${amountFor(perf) / 100} (${
       perf.audience
     })석 \n`;
@@ -84,7 +84,10 @@ function renderPlainText(invoce, plays) {
 }
 
 function statement(invoce, plays) {
-  return renderPlainText(invoce, plays);
+  const statementData = {};
+  statementData.customer = invoce[0].customer;
+  statementData.performances = invoce[0].performances;
+  return renderPlainText(statementData, invoce, plays);
 }
 
 console.log(statement(invoces, plays));
