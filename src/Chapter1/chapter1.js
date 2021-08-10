@@ -20,13 +20,46 @@ const plays = {
 function renderPlainText(data, plays) {
   let result = `청구 내역 (고객명: ${data.customer})\n`;
   for (let perf of data.performances) {
-    result += `${perf.play.name}: ${amountFor(perf) / 100} (${
-      perf.audience
-    })석 \n`;
+    result += `${perf.play.name}: ${perf.amount / 100} (${perf.audience})석 \n`;
   }
   result += `총액: ${totalAmount() / 100}\n`;
   result += `적립 포인트 : ${totalVolumeCredit()}점\n`;
   return result;
+
+  function totalVolumeCredit() {
+    let result = 0;
+    for (let perf of data.performances) {
+      result += perf.volumeCredit;
+    }
+    return result;
+  }
+
+  function totalAmount() {
+    let result = 0;
+    for (let perf of data.performances) {
+      result += perf.amount;
+    }
+    return result;
+  }
+}
+
+function statement(invoce, plays) {
+  const statementData = {};
+  statementData.customer = invoce[0].customer;
+  statementData.performances = invoce[0].performances.map(enrichPerformace);
+  return renderPlainText(statementData, plays);
+
+  function enrichPerformace(aPerformace) {
+    const result = Object.assign({}, aPerformace);
+    result.play = playFor(result);
+    result.amount = amountFor(result);
+    result.volumeCredit = volumeCreditFor(result);
+    return result;
+  }
+
+  function playFor(aPerformace) {
+    return plays[aPerformace.playID];
+  }
 
   function amountFor(aPerformance) {
     let result = 0;
@@ -58,42 +91,6 @@ function renderPlainText(data, plays) {
     if ("comedy" === aPerformace.play.type)
       result += Math.floor(aPerformace.audience / 5);
     return result;
-  }
-
-  // 책: function totalVolumeCredit(){
-  function totalVolumeCredit() {
-    let result = 0;
-    for (let perf of data.performances) {
-      result += volumeCreditFor(perf);
-    }
-    return result;
-  }
-
-  function totalAmount() {
-    let result = 0;
-    for (let perf of data.performances) {
-      result += amountFor(perf);
-    }
-    return result;
-  }
-}
-
-function statement(invoce, plays) {
-  const statementData = {};
-  statementData.customer = invoce[0].customer;
-  statementData.performances = invoce[0].performances.map(enrichPerformace);
-  console.log(statementData.performances);
-  return renderPlainText(statementData, plays);
-
-  function enrichPerformace(aPerformace) {
-    const result = Object.assign({}, aPerformace);
-    // 여기서 play = {...} 객체가 statementData.performance들에 각각 추가됨.
-    result.play = playFor(result);
-    return result;
-  }
-
-  function playFor(aPerformace) {
-    return plays[aPerformace.playID];
   }
 }
 
