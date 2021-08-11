@@ -70,6 +70,21 @@ class PerformaceCalculator {
   }
 }
 
+class TragedyCalculator extends PerformaceCalculator {}
+
+class ComedyCalculator extends PerformaceCalculator {}
+
+function createPerformaceCalculator(aPerformace, aPlay) {
+  switch (aPlay.type) {
+    case "tragedy":
+      return new TragedyCalculator(aPerformace, aPlay);
+    case "comedy":
+      return new ComedyCalculator(aPerformace, aPlay);
+    default:
+      throw new Error(`알수없는 장르: ${aPlay.type}`);
+  }
+}
+
 function createStatementData(invoce, plays) {
   const statementData = {};
   statementData.customer = invoce[0].customer;
@@ -78,7 +93,7 @@ function createStatementData(invoce, plays) {
   statementData.totalVolumeCredit = totalVolumeCredit(statementData);
 
   function enrichPerformace(aPerformace) {
-    const calculator = new PerformaceCalculator(
+    const calculator = createPerformaceCalculator(
       aPerformace,
       playFor(aPerformace)
     );
