@@ -38,41 +38,38 @@ class PerformaceCalculator {
   }
 
   get amount() {
-    let result = 0;
-    switch (this.play.type) {
-      case "tragedy":
-        result = 40000;
-        if (this.performance.audience > 20) {
-          result += 1000 * (this.performance.audience - 30);
-        }
-        break;
-
-      case "comedy":
-        result = 30000;
-        if (this.performance.audience > 20) {
-          result += 10000 + 500 * (this.performance.audience - 20);
-        }
-        result += 300 * this.performance.audience;
-        break;
-
-      default:
-        throw new Error("알수 없는 장르");
-    }
-    return result;
+    throw new Error("서브 클래스에서 처리하도록 설계되었습니다.");
   }
 
   get volumeCredit() {
-    let result = 0;
-    result += Math.max(this.performance.audience - 30, 0);
-    if ("comedy" === this.play.type)
-      result += Math.floor(this.performance.audience / 5);
+    return Math.max(this.performance.audience - 30, 0);
+  }
+}
+
+class TragedyCalculator extends PerformaceCalculator {
+  get amount() {
+    let result = 40000;
+    if (this.performance.audience > 20) {
+      result += 1000 * (this.performance.audience - 30);
+    }
     return result;
   }
 }
 
-class TragedyCalculator extends PerformaceCalculator {}
+class ComedyCalculator extends PerformaceCalculator {
+  get amount() {
+    let result = 30000;
+    if (this.performance.audience > 20) {
+      result += 10000 + 500 * (this.performance.audience - 20);
+    }
+    result += 300 * this.performance.audience;
+    return result;
+  }
 
-class ComedyCalculator extends PerformaceCalculator {}
+  get volumeCredit() {
+    return super.volumeCredit + Math.floor(this.performance.audience / 5);
+  }
+}
 
 function createPerformaceCalculator(aPerformace, aPlay) {
   switch (aPlay.type) {
