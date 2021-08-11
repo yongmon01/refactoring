@@ -33,8 +33,32 @@ function statement(invoce, plays) {
 
 class PerformaceCalculator {
   constructor(aPerformace, aPlay) {
-    this.performace = aPerformace;
+    this.performance = aPerformace;
     this.play = aPlay;
+  }
+
+  get amount() {
+    let result = 0;
+    switch (this.play.type) {
+      case "tragedy":
+        result = 40000;
+        if (this.performance.audience > 20) {
+          result += 1000 * (this.performance.audience - 30);
+        }
+        break;
+
+      case "comedy":
+        result = 30000;
+        if (this.performance.audience > 20) {
+          result += 10000 + 500 * (this.performance.audience - 20);
+        }
+        result += 300 * this.performance.audience;
+        break;
+
+      default:
+        throw new Error("알수 없는 장르");
+    }
+    return result;
   }
 }
 
@@ -52,7 +76,7 @@ function createStatementData(invoce, plays) {
     );
     const result = Object.assign({}, aPerformace);
     result.play = calculator.play;
-    result.amount = amountFor(result);
+    result.amount = calculator.amount;
     result.volumeCredit = volumeCreditFor(result);
     return result;
   }
@@ -61,29 +85,9 @@ function createStatementData(invoce, plays) {
     return plays[aPerformace.playID];
   }
 
-  function amountFor(aPerformance) {
-    let result = 0;
-    switch (aPerformance.play.type) {
-      case "tragedy":
-        result = 40000;
-        if (aPerformance.audience > 20) {
-          result += 1000 * (aPerformance.audience - 30);
-        }
-        break;
-
-      case "comedy":
-        result = 30000;
-        if (aPerformance.audience > 20) {
-          result += 10000 + 500 * (aPerformance.audience - 20);
-        }
-        result += 300 * aPerformance.audience;
-        break;
-
-      default:
-        throw new Error("알수 없는 장르");
-    }
-    return result;
-  }
+  // function amountFor(aPerformance) {
+  //   return new PerformaceCalculator(aPerformance, playFor(aPerformance)).amount; 여기는 왜 이래야 되지
+  // }
 
   function volumeCreditFor(aPerformace) {
     let result = 0;
