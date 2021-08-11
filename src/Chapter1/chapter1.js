@@ -31,6 +31,13 @@ function statement(invoce, plays) {
   return renderPlainText(createStatementData(invoce, plays));
 }
 
+class PerformaceCalculator {
+  constructor(aPerformace, aPlay) {
+    this.performace = aPerformace;
+    this.play = aPlay;
+  }
+}
+
 function createStatementData(invoce, plays) {
   const statementData = {};
   statementData.customer = invoce[0].customer;
@@ -39,8 +46,12 @@ function createStatementData(invoce, plays) {
   statementData.totalVolumeCredit = totalVolumeCredit(statementData);
 
   function enrichPerformace(aPerformace) {
+    const calculator = new PerformaceCalculator(
+      aPerformace,
+      playFor(aPerformace)
+    );
     const result = Object.assign({}, aPerformace);
-    result.play = playFor(result);
+    result.play = calculator.play;
     result.amount = amountFor(result);
     result.volumeCredit = volumeCreditFor(result);
     return result;
