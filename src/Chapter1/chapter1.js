@@ -60,6 +60,14 @@ class PerformaceCalculator {
     }
     return result;
   }
+
+  get volumeCredit() {
+    let result = 0;
+    result += Math.max(this.performance.audience - 30, 0);
+    if ("comedy" === this.play.type)
+      result += Math.floor(this.performance.audience / 5);
+    return result;
+  }
 }
 
 function createStatementData(invoce, plays) {
@@ -77,7 +85,7 @@ function createStatementData(invoce, plays) {
     const result = Object.assign({}, aPerformace);
     result.play = calculator.play;
     result.amount = calculator.amount;
-    result.volumeCredit = volumeCreditFor(result);
+    result.volumeCredit = calculator.volumeCredit;
     return result;
   }
 
@@ -89,13 +97,7 @@ function createStatementData(invoce, plays) {
   //   return new PerformaceCalculator(aPerformance, playFor(aPerformance)).amount; 여기는 왜 이래야 되지
   // }
 
-  function volumeCreditFor(aPerformace) {
-    let result = 0;
-    result += Math.max(aPerformace.audience - 30, 0);
-    if ("comedy" === aPerformace.play.type)
-      result += Math.floor(aPerformace.audience / 5);
-    return result;
-  }
+  // function volumeCreditFor(aPerformace) {}
 
   function totalAmount(data) {
     return data.performances.reduce((total, p) => total + p.amount, 0);
