@@ -1,6 +1,12 @@
 let defaultOwner = { firstName: "martin", lastName: "fouler" };
+export function getDefaultOwner() {
+  return defaultOwner;
+}
+export function setDefaultOwner(arg) {
+  defaultOwner = arg;
+}
 
 // 참조하는 코드
-spaceship.owner = defaultOwner;
+spaceship.owner = getDefaultOwner();
 // 갱신하는 코드
-defaultOwner = { firstName: "lebeca", lastName: "parsons" };
+setDefaultOwner({ firstName: "lebeca", lastName: "parsons" });
