@@ -10,7 +10,7 @@ function priceOrder(product, quantity, shippingMethod) {
     quantity: quantity,
     discount: discount,
   };
-  const price = applyShipping(priceData, shippingMethod, discount);
+  const price = applyShipping(priceData, shippingMethod);
   return price;
 }
 
