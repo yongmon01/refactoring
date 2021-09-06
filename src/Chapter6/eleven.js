@@ -1,8 +1,7 @@
 // 상품 결재 금액을 계산 하는 코드
 function priceOrder(product, quantity, shippingMethod) {
   const priceData = calculatePricingData(product, quantity);
-  const price = applyShipping(priceData, shippingMethod);
-  return price;
+  return applyShipping(priceData, shippingMethod);
 }
 
 function calculatePricingData(product, quantity) {
