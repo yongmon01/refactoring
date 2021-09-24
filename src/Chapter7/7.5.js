@@ -10,16 +10,16 @@ class Person {
     this._name = arg;
   }
   get telephoneNumber() {
-    return this._telephoneNumber.telephoneNumber;
+    return this._telephoneNumber.toString();
   }
   get officeAreaCode() {
-    return this._telephoneNumber.officeAreaCode;
+    return this._telephoneNumber.areaCode;
   }
   set officeAreaCode(arg) {
-    this._telephoneNumber._officeAreaCode = arg;
+    this._telephoneNumber.areaCode = arg;
   }
   get officeNumber() {
-    return this._telephoneNumber._officeNumber;
+    return this._telephoneNumber.number;
   }
   set officeNumber(arg) {
     this._telephoneNumber._officeNumber = arg;
@@ -29,7 +29,8 @@ class Person {
 class TelephoneNumber{
     constructor()
 
-    get officeAreaCode() {return this._officeAreaCode}
-    set officeAreaCode(arg) {this._officeAreaCode = arg}
-    get telephoneNumber() {return `(${this.officeAreaCode}) ${this.officeNumber}`}
+    get areaCode() {return this._areaCode}
+    set areaCode(arg) {this.areaCode = arg}
+    get number() {return `(${this.areaCode}) ${this.number}`}
+    toString() {return `(${this.areaCode}) ${this.number}`}
 }
