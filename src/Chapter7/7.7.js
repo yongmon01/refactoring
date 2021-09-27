@@ -11,6 +11,9 @@ class Person {
   set department(arg) {
     this._department = arg;
   }
+  get manager() {
+    return this._department.manager;
+  }
 }
 
 class Department {
@@ -29,4 +32,4 @@ class Department {
 }
 
 aPerson = new Person();
-manager = aPerson.department.manager;
+manager = aPerson.manager;
